@@ -1,0 +1,130 @@
+/*
+
+    author : s@if
+
+*/
+
+#include<bits/stdc++.h>
+#include<ext/pb_ds/assoc_container.hpp>
+using namespace __gnu_pbds;
+using namespace std;
+
+#define 		NIL 			-1
+#define		 	fi	 		    first
+#define 		sec 			second
+#define 		MAX 			INT_MAX
+#define			INF 			99999999
+#define 		ll 			    long long
+#define 		PI 			    acos(-1.0)
+#define			MOD 			1000000007
+#define 		PLL 			pair<ll,ll>
+#define 		PII			    pair<int,int>
+#define 		ull 			unsigned long long
+#define 		For(i,a,b) 		for(int i=a;i<=(int)b;i++)
+typedef tree<int, null_type, less<int>, rb_tree_tag,
+            tree_order_statistics_node_update> new_data_set;
+
+//*find_by_order(k)  gives the kth element;
+//order_of_key(item)   gives the index(number of element strictly less than item) of item;
+
+
+inline int in() {int x; scanf("%d", &x); return x; }
+bool Check(int N , int pos)	{	return (bool) (N & (1<<pos));}
+int Set(int N, int pos) {	return N = N | (1<<pos);}
+
+int fx[]={+0,+0,+1,-1,-1,+1,-1,+1};
+int fy[]={-1,+1,+0,+0,+1,+1,-1,-1};
+int hr[]={-2,-2,-1,+1,+2,+2,-1,+1};
+int hc[]={+1,-1,+2,+2,-1,+1,-2,-2};
+int dx[]={+1,-1,+0,+0};
+int dy[]={+0,+0,+1,-1};
+
+const int MAXN = (int)1e5+9;
+
+int tre[3*MAXN], ara[MAXN];
+map<int,int>mp1, mp2;
+
+void init(int node, int l, int r)
+{
+    if(l==r)
+    {
+        tre[node] = 1;
+        return ;
+    }
+
+    int mid = (l+r)>>1;
+
+    init(node*2, l, mid);
+    init(node*2+1, mid+1, r);
+
+    int l1 = max(l, mp1[ara[mid]]), r1 = min(r, mp2[ara[mid+1]]);
+    int mx = max(tre[node*2], tre[node*2+1]);
+    if(ara[mid]==ara[mid+1]) mx = max(mx, r1-l1+1);
+
+    tre[node] = mx;
+    //cout<<node<<" "<<mx<<endl;
+}
+
+int query(int node, int l, int r, int x, int y)
+{
+    if(l>y || r<x) return 0;
+    if(l>=x && r<=y)
+        return tre[node];
+
+    int mid = (l+r)>>1;
+
+    int ret1 = query(node*2, l, mid, x, y);
+    int ret2 = query(node*2+1, mid+1, r, x, y);
+
+    int l1 = max(x, mp1[ara[mid]]), r1 = min(y, mp2[ara[mid+1]]);
+    int mx = 0;
+    if(ara[mid]==ara[mid+1]) mx = max(mx, r1-l1+1);
+
+    return max(mx, max(ret1,ret2));
+}
+
+int main()
+{
+/*	freopen("input.txt","r",stdin);
+    freopen("output.txt","w",stdout);
+    ios_base::sync_with_stdio(false);
+    cin.tie(0);
+    cout.tie(0);  */
+
+    int i,j,k,l,m,n,p,q,x,y,u,v,r,tc,t;
+
+    while(scanf("%d", &n)==1 && n)
+    {
+        q = in(); For(i,1,n)
+        {
+            ara[i] = in();
+            mp1[ara[i]] = INT_MAX;
+        }
+
+        for(i=1; i<=n; i++)
+        {
+            v = ara[i];
+            mp1[v] = min(mp1[v], i);
+            mp2[v] = max(mp2[v], i);
+        }
+
+        init(1,1,n);
+
+       // for(i=1; i<=20; i++) cout<<tre[i]<<" "; cout<<endl;
+
+        while(q--)
+        {
+            l = in(), r = in();
+            int ans = query(1,1,n,l,r);
+
+            printf("%d\n", ans);
+        }
+
+        mp1.clear(); mp2.clear();
+    }
+
+    return 0;
+}
+
+// read the question correctly (is y a vowel? what are the exact constraints?)
+// look out for SPECIAL CASES (n=1?) and overflow (ll vs int?)
