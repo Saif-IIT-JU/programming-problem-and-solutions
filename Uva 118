@@ -1,0 +1,137 @@
+/*
+
+    author : s@if
+
+*/
+
+#include<bits/stdc++.h>
+#include<ext/pb_ds/assoc_container.hpp>
+using namespace __gnu_pbds;
+using namespace std;
+
+#define 		NIL 			-1
+#define		 	fi	 		    first
+#define 		sec 			second
+#define 		MAX 			INT_MAX
+#define			INF 			1e9
+#define 		ll 			    long long
+#define 		PI 			    acos(-1.0)
+#define			MOD 			1000000007
+#define 		PLL 			pair<ll,ll>
+#define 		PII			    pair<int,int>
+#define 		ull 			unsigned long long
+#define 		For(i,a,b) 		for(int i=a;i<=(int)b;i++)
+typedef tree<int, null_type, less<int>, rb_tree_tag,
+            tree_order_statistics_node_update> new_data_set;
+
+//*find_by_order(k)  gives the kth element;
+//order_of_key(item)   gives the index(number of element strictly less than item) of item;
+
+
+inline int in() {int x; scanf("%d", &x); return x; }
+bool Check(int N , int pos)	{	return (bool) (N & (1<<pos));}
+int Set(int N, int pos) {	return N = N | (1<<pos);}
+
+int fx[]={+0,+0,+1,-1,-1,+1,-1,+1};
+int fy[]={-1,+1,+0,+0,+1,+1,-1,-1};
+int hr[]={-2,-2,-1,+1,+2,+2,-1,+1};
+int hc[]={+1,-1,+2,+2,-1,+1,-2,-2};
+int dx[]={+1,-1,+0,+0};
+int dy[]={+0,+0,+1,-1};
+
+const int MAXN = (int)2e5+9;
+
+int n, m;
+int grid[60][60];
+
+char Move(char c, char c2)
+{
+    if(c2=='R')
+    {
+        if(c=='E')      return 'S';
+        else if(c=='S') return 'W';
+        else if(c=='W') return 'N';
+        else            return 'E';
+    }
+    else
+    {
+        if(c=='E')      return 'N';
+        else if(c=='S') return 'E';
+        else if(c=='W') return 'S';
+        else            return 'W';
+    }
+}
+
+PII Forward(int x, int y, char c)
+{
+    if(c=='N')      return PII(x,y+1);
+    else if(c=='E') return PII(x+1,y);
+    else if(c=='S') return PII(x,y-1);
+    else            return PII(x-1,y);
+}
+
+int OK(int x2, int y2, int x, int y)
+{
+    if(x2>=0 && x2<=n && y2>=0 && y2<=m) return 1;
+    else
+    {
+        if(grid[x][y]==1)
+            return 2;
+        else
+            return 3;
+    }
+}
+
+int main()
+{
+/*	freopen("input.txt","r",stdin);
+    freopen("output.txt","w",stdout);
+    ios_base::sync_with_stdio(false);
+    cin.tie(0);
+    cout.tie(0);  */
+
+    int i,j,k,l,p,q,x,y,u,v,r,tc,t;
+
+    while(scanf("%d %d", &n, &m)==2)
+    {
+        memset(grid, 0, sizeof(grid));
+
+        while(scanf("%d %d", &x, &y)==2)
+        {
+            char c, s[109];
+            cin>>c;
+            cin>>s; l = strlen(s);
+
+            bool flag = false;
+
+            for(i=0; i<l; i++)
+            {
+                if(s[i]=='L' || s[i]=='R')
+                    c = Move(c,s[i]);
+                else
+                {
+                    PII pi = Forward(x,y,c);
+                    int x1 = pi.fi, y1 = pi.sec;
+
+                    k = OK(x1,y1,x,y);
+
+                    if(k==1) x = x1, y = y1;
+                    else if(k==2) ;
+                    else{
+                        grid[x][y] = 1;
+                        flag = true; break;
+                    }
+                }
+            }
+
+            if(flag) printf("%d %d %c LOST\n", x, y, c);
+            else
+                printf("%d %d %c\n", x, y, c);
+        }
+    }
+
+    return 0;
+}
+
+// read the question correctly (is y a vowel? what are the exact constraints?)
+// look out for SPECIAL CASES (n=1?) and overflow (ll vs int?)
