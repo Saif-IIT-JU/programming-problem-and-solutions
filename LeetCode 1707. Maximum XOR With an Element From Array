@@ -1,0 +1,74 @@
+class Solution {
+public:
+    struct node{   // For query
+        int x, m, idx;
+        node(){x = -1, m = -1, idx = -1;}
+        node(int _x, int _m, int _id){
+            x = _x, m = _m, idx = _id;
+        }
+
+        bool operator<(const node &nd)const{
+            return m<nd.m;
+        }
+    };
+
+    struct Tree{ // For Trie
+        Tree *next[2];
+        Tree(){
+            next[0] = next[1] = NULL;
+        }
+    };
+
+    void Add(Tree *root, int x)  // Add a number to the trie
+    {
+        for(int i=30; i>=0; i--)
+        {
+            int bit = (bool)(x&(1<<i));
+            if(root->next[bit]==NULL)
+                root->next[bit] = new Tree();
+            root = root->next[bit];
+        }
+    }
+
+    int Go(Tree *root, int x){ // Traverse the trie
+        int Xor = 0;
+        for(int i=30; i>=0; i--)
+        {
+            int bit = (bool)(x&(1<<i));
+
+            if(root->next[bit^1]!=NULL){
+                Xor = Xor|(1<<i);
+                root = root->next[bit^1];
+            }
+            else root = root->next[bit];
+        }
+
+        return Xor;
+    }
+
+    vector<int> maximizeXor(vector<int>& nums, vector<vector<int>>& queries) {
+        sort(nums.begin(), nums.end());
+        vector<node>qry; int i, j;
+        for(i=0; i<queries.size(); i++)
+        {
+            qry.push_back(node(queries[i][0], queries[i][1], i));
+        }
+        sort(qry.begin(), qry.end());
+        vector<int>ans(queries.size());
+
+        Tree *root = new Tree();
+        for(i=0, j = -1; i<qry.size(); i++)
+        {
+            int x = qry[i].x, m = qry[i].m, idx = qry[i].idx;
+            while(j+1<nums.size() && nums[j+1]<=m){
+                Add(root, nums[j+1]); j++;
+            }
+            if(j==-1) ans[idx] = -1;
+            else{
+                ans[idx] = Go(root, x);
+            }
+        }
+
+        return ans;
+    }
+};
