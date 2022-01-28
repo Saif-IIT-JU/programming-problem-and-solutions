@@ -1,0 +1,60 @@
+class Solution {
+public:
+    void Add(vector<int>& arr, char c)
+    {
+        if(c>='a' && c<='z') arr[c-'a']++;
+        else{
+            arr[c-'A'+26]++;
+        }
+        return;
+    }
+    bool OK(vector<int>arr, vector<int>arr2)
+    {
+        for(int i=0; i<52; i++)
+        {
+            if(arr[i]<arr2[i]) return false;
+        }
+        return true;
+    }
+    bool OK2(vector<int>&arr1, vector<int>arr2, char c)
+    {
+        int id;
+        if(c>='a' && c<='z') id = c-'a';
+        else id = c-'A'+26;
+        arr1[id]--;
+        if(OK(arr1, arr2)) return true;
+        
+        arr1[id]++;
+        return false;
+    }
+    string minWindow(string s, string t) {
+        int  m = s.size(), n = t.size(), i, j;
+        vector<int>cnt(52), cnt2(52);
+        for(i=0; i<n; i++){
+            Add(cnt2, t[i]);
+        }
+        
+        int l = -1, r = -1, len = 1e9;
+        i = j = 0;
+        while(j<m)
+        {
+            Add(cnt, s[j]);
+            if(OK(cnt, cnt2))
+            {
+                while(i<j){
+                    if(OK2(cnt, cnt2, s[i])) i++;
+                    else break;
+                }
+                if(j-i+1<len){
+                    len = j-i+1; l = i, r = j;
+                }
+            }
+            j++;
+        }
+        
+        string ret = "";
+        if(l==-1) return ret;
+        ret = s.substr(l, r-l+1);
+        return ret;
+    }
+};
