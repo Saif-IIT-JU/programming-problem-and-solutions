@@ -1,0 +1,27 @@
+class Solution {
+public:
+    int minCostSetTime(int startAt, int moveCost, int pushCost, int targetSeconds) {
+        int ans = INT_MAX, mx = 9999;
+        for(int i=0; i<=mx; i++)
+        {
+            int mnt = i%100, hr = i/100; bool lz = true;
+            if(hr*60+mnt==targetSeconds)
+            {
+                int st = startAt;
+                int p = 1000, nm = i, tmp = 0;
+                for(int j=0; j<4; j++)
+                {
+                    int dgt = nm/p; if(dgt==0 && lz){nm = nm%p; p/=10; continue;} lz = false;
+                    if(dgt!=st){
+                        tmp+=moveCost;
+                    }
+                    tmp+=pushCost;
+                    st = dgt; nm = nm%p; p/=10;
+                }
+                ans = min(ans, tmp);
+            }
+        }
+        
+        return ans;
+    }
+};
