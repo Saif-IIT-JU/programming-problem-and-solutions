@@ -1,0 +1,26 @@
+class Solution {
+public:
+    vector<string>vs; string S;
+    void permute(int i){
+        if(i==S.size()){
+            vs.push_back(S); return;
+        }
+        
+        if(S[i]>='a' && S[i]<='z')
+        {
+            permute(i+1);
+            string t = S; S[i] = S[i]-'a'+'A';
+            permute(i+1); S = t;
+        }
+        else if(S[i]>='A' && S[i]<='Z')
+        {
+            permute(i+1);
+            string t = S; S[i] = S[i]-'A'+'a';
+            permute(i+1); S = t;
+        }
+        else permute(i+1);
+    }
+    vector<string> letterCasePermutation(string s) {
+        S = s; permute(0); return vs;
+    }
+};
