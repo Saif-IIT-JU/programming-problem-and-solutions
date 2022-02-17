@@ -1,0 +1,25 @@
+class Solution {
+public:
+    vector<int>nums; vector<vector<int> >ans;
+    vector<int>tmp;
+    void rec(int i, int target)
+    {
+        if(target==0){
+            ans.push_back(tmp); return;
+        }
+        if(target<0) return ;
+        if(i>=nums.size()) return;
+        
+        tmp.push_back(nums[i]);
+        rec(i, target-nums[i]);
+        tmp.pop_back();
+        rec(i+1, target);
+    }
+    vector<vector<int>> combinationSum(vector<int>& candidates, int target) {
+        sort(candidates.begin(), candidates.end()); nums = candidates;
+        
+        rec(0, target);
+        
+        return ans;
+    }
+};
