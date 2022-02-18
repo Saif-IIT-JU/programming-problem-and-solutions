@@ -1,0 +1,35 @@
+class Solution {
+public:
+    string removeKdigits(string num, int k) {
+        int n = num.size(), i, j;
+        int prev[n+9]; for(i=0; i<=n; i++)prev[i] = i-1;
+        
+        i = 0; int bad[100009] = {0};
+        while(k--)
+        {
+            int p = -1;
+            while(i<=n){
+                if(i==n){p=prev[i]; break;}
+                else if(prev[i]>-1 && num[prev[i]]>num[i]){
+                    p = prev[i]; break;
+                }
+                else i++;
+            }
+            
+            if(p!=-1){prev[i] = prev[p]; bad[p] = 1; }
+        }
+        
+        bool lz = true; string res = "";
+        for(i=0; i<n; i++)
+        {
+            if(bad[i]==1) continue;
+            
+            if(num[i]=='0' && lz) continue;
+            
+            res+=num[i]; lz = false;
+        }
+        
+        if(res.size()==0) res = "0";
+        return res;
+    }
+};
