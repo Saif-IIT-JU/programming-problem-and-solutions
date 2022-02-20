@@ -1,0 +1,31 @@
+class Solution {
+public:
+    int findPrev(int cnt[], int p)
+    {
+        for(; p>=0; p--)
+        {
+            if(cnt[p]>0) return p;
+        }
+        return p;
+    }
+    string repeatLimitedString(string s, int repeatLimit) {
+        int cnt[26] = {0}, i, j, lmt = repeatLimit;
+        string ans = "";
+        for(i=0; i<s.size(); i++)
+        {
+            cnt[s[i]-'a']++;
+        }
+        
+        for(i=25; i>=0; ){
+            int mn = min(lmt, cnt[i]);
+            for(j=0; j<mn; j++) ans+=(char)(i+'a');
+            cnt[i]-=mn; if(cnt[i]==0){i--; continue;}
+            
+            int prev = findPrev(cnt, i-1);
+            if(prev==-1) break;
+            
+            ans+=(char)(prev+'a'); cnt[prev]--;
+        }
+        return ans;
+    }
+};
