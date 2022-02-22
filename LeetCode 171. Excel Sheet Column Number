@@ -1,0 +1,24 @@
+class Solution {
+public:
+    long long power(long a, int b)
+    {
+        long ret = 1;
+        while(b){
+            if(b&1) ret = (ret*a);
+            a = (a*a);
+            b>>=1;
+        }
+        return ret;
+    }
+    int titleToNumber(string columnTitle) {
+        int ret = 0; int len = columnTitle.size();
+        for(int i=0; i<len; i++)
+        {
+            int val = columnTitle[i]-'A'+1;
+            int p = power(26, len-i-1);
+            ret += p*val;
+        }
+        
+        return ret;
+    }
+};
