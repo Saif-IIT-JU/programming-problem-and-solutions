@@ -1,0 +1,55 @@
+/*
+// Definition for a Node.
+class Node {
+public:
+    int val;
+    vector<Node*> neighbors;
+    Node() {
+        val = 0;
+        neighbors = vector<Node*>();
+    }
+    Node(int _val) {
+        val = _val;
+        neighbors = vector<Node*>();
+    }
+    Node(int _val, vector<Node*> _neighbors) {
+        val = _val;
+        neighbors = _neighbors;
+    }
+};
+*/
+
+class Solution {
+public:
+    Node* arr[109]; int vis[109] = {0};
+    void dfs(Node *curr){
+        //cout<<curr->val<<endl;
+        vis[curr->val] = 1;
+        arr[curr->val] = new Node(curr->val);
+        
+        for(int i=0; i<curr->neighbors.size(); i++)
+        {
+            int val = curr->neighbors[i]->val;
+            if(vis[val]==0){
+                dfs(curr->neighbors[i]);
+            }
+        }
+    }
+    void dfs2(Node* node){
+        vis[node->val] = 1;
+        for(int i=0; i<node->neighbors.size(); i++)
+        {
+            Node *v = node->neighbors[i];
+            arr[node->val]->neighbors.push_back(arr[v->val]);
+            
+            if(vis[v->val]==0){
+                dfs2(v);
+            }
+        }
+    }
+    Node* cloneGraph(Node* node) {
+        if(node==NULL) return NULL;
+        dfs(node); memset(vis, 0, sizeof(vis)); dfs2(node);
+        return arr[1];
+    }
+};
