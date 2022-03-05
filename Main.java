@@ -14,16 +14,53 @@ public class Main
     static void print(int n){System.out.print(n);} static void print(char c){System.out.print(c);}
     static void print(int arr[]){for(int a: arr) System.out.print(a + " "); System.out.println();}
     
+    static ArrayList<Long>facts = new ArrayList<Long>();
+    static ArrayList<Long>sums = new ArrayList<Long>();
+    static long n;
+    
+    static int Cnt(Long x)
+    {
+        int ret = 0;
+        while(x>0)
+        {
+            if(x%2==1) ret++;
+            x/=2;
+        }
+        
+        return ret;
+    }
     
     static void Solve()
     {
-        int i, j, k, l, m, n, x, y, w, p, q, t;
-        System.out.println(max(10,23));
+        long i, j, k, l, m, x, y, w, p, q, t;
+        
+        n = sc.nextLong(); long ans = 1000000;
+        int sz = facts.size();
+        for(int mask=0; mask<(1<<sz); mask++)
+        {
+            long sum = 0, cnt = 0;
+            for(i=0; i<sz; i++)
+            {
+                if((mask&(1<<i))>0){
+                    sum = sum+facts.get((int)i); cnt++;
+                }
+            }
+            if(sum<=n)ans = Math.min(ans, cnt+Cnt(n-sum));
+        }
+        
+        
+        System.out.println(ans);
     }
     
     public static void main(String []args)
     {
-        int tc = sc.nextInt();
+        int tc = sc.nextInt();int i, j; 
+        facts.add((long)6);
+        for(i=4, j=1; i<=15 ; i++, j++)
+        {
+            facts.add(facts.get(j-1)*i);
+        }
+        //System.out.println(facts.get(i-1));
         while(tc-->0)
         {
             Solve();
