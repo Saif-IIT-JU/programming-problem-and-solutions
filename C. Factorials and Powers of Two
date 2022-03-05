@@ -12,7 +12,7 @@ public class Main
     static int Off(int N, int pos){if(Check(N,pos)==false) return N; return Toggle(N,pos);}
     static int in(){int a = sc.nextInt(); return a;} static void println(int n){System.out.println(n);}
     static void print(int n){System.out.print(n);} static void print(char c){System.out.print(c);}
-    static void print(int arr[]){for(int a: arr) System.out.print(a + " "); System.out.println();}
+    
     
     static ArrayList<Long>facts = new ArrayList<Long>();
     static ArrayList<Long>sums = new ArrayList<Long>();
