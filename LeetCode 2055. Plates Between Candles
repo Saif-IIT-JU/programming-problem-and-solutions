@@ -1,0 +1,59 @@
+class Solution {
+    int pref[], n;
+    
+    int Sum(int l, int r)
+    {
+        if(l>r) return 0;
+        return pref[r] - pref[l-1];
+    }
+    int FindLower(int p)
+    {
+        int l = p, r = n, mid, ret = n+1;
+        while(l<=r)
+        {
+            mid = (l+r)/2;
+            int s = Sum(p, mid);
+            int s2 = mid-p+1;
+            if(s<s2){ret = mid; r = mid-1;}
+            else l = mid+1;
+        }
+        return ret;
+    }
+    int FindUpper(int p)
+    {
+        int l = 1, r = p, mid, ret=0;
+        while(l<=r)
+        {
+            mid = (l+r)/2;
+            int s = Sum(mid, p);
+            int s2 = p-mid+1;
+            if(s<s2){
+                ret = mid; l = mid+1;
+            }
+            else r = mid-1;
+        }
+        return ret;
+    }
+    public int[] platesBetweenCandles(String s, int[][] queries) {
+        n = s.length(); pref = new int[n+9]; pref[0] = 0;
+        
+        for(int i=1; i<=n; i++)
+        {
+            if(s.charAt(i-1)=='*') pref[i] = 1;
+            else pref[i] = 0;
+        }
+        for(int i=1; i<=n; i++) pref[i]+=pref[i-1];
+        
+        int m = queries.length; int ans[] = new int[m];
+        for(int i=0; i<m; i++)
+        {
+            int l = queries[i][0]+1, r = queries[i][1]+1 ;
+            
+            l = FindLower(l); r = FindUpper(r);
+            
+            ans[i] = Sum(l, r);
+        }
+        
+        return ans;
+    }
+}
