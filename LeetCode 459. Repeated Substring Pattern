@@ -1,0 +1,26 @@
+class Solution {
+    public boolean repeatedSubstringPattern(String s) {
+        int n = s.length(), i, now; int pi[] = new int[n];
+        
+        pi[0] = now = -1;
+        
+        for(i=1; i<n; i++)
+        {
+            while(now!=-1 && s.charAt(now+1)!=s.charAt(i))
+            {
+                now = pi[now];
+            }
+            
+            if(s.charAt(now+1)!=s.charAt(i)) now = pi[i] = -1;
+            else pi[i] = ++now;
+        }
+        
+       // System.out.println(pi[n-1]);
+        if(n%(n-(pi[n-1]+1))!=0) return false;
+        else{
+            int m = (n-(pi[n-1]+1));
+            
+            return m<n;
+        }
+    }
+}
