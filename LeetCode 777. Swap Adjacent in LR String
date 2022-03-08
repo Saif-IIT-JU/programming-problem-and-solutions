@@ -1,0 +1,24 @@
+class Solution {
+    public boolean canTransform(String start, String end) {
+        int startIdx = 0, endIdx = 0;
+        while(startIdx<start.length() || endIdx<end.length())
+        {
+            while(startIdx<start.length() && start.charAt(startIdx)=='X')
+                startIdx++;
+            
+            while(endIdx<end.length() && end.charAt(endIdx)=='X')
+                endIdx++;
+            
+            if(startIdx>=start.length() || endIdx>=end.length()) break;
+            
+            if(start.charAt(startIdx)!=end.charAt(endIdx)) return false;
+            
+            if(start.charAt(startIdx)=='L' && startIdx<endIdx) return false;
+            if(start.charAt(startIdx)=='R' && startIdx>endIdx) return false;
+            
+            startIdx++; endIdx++;
+        }
+        
+        return startIdx==endIdx;
+    }
+}
