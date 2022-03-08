@@ -1,0 +1,49 @@
+class Solution {
+    boolean isSubString(String a, String b)
+    {
+        int n = a.length(), m = b.length(), now, i;
+        int pi[] = new int[m]; pi[0] = now = -1;
+        
+        for(i=1; i<m; i++)
+        {
+            while(now!=-1 && b.charAt(now+1)!=b.charAt(i))
+            {
+                now = pi[now];
+            }
+            
+            if(b.charAt(now+1)!=b.charAt(i)) pi[i] = now = -1;
+            else pi[i] = ++now;
+        }
+        
+        now = -1;
+        for(i=0; i<n; i++)
+        {
+            while(now!=-1 && b.charAt(now+1)!=a.charAt(i))
+            {
+                now = pi[now];
+            }
+            if(b.charAt(now+1)!=a.charAt(i)) now = -1;
+            else ++now;
+            
+            if(now+1==m) return true;
+        }
+        
+        return false;
+    }
+    public int repeatedStringMatch(String a, String b) {
+        int ans = 1; String root = a;
+        while(a.length()<b.length())
+        {
+            a+=root; ans++;
+        }
+        
+        if(isSubString(a, b)==true) return ans;
+        else
+        {
+            ans++; a+=root;
+            if(isSubString(a, b)==true) return ans;
+        }
+        
+        return -1;
+    }
+}
