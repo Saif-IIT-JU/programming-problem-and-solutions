@@ -1,0 +1,47 @@
+class Solution {
+    static boolean Find(char c1, char c2, char ch[])
+    {
+        int l=0, r=0, i;
+        for(i=0; i<7; i++)
+        {
+            if(ch[i]==c1) l = i;
+        }
+        for(i=0; i<7; i++)
+        {
+            if(ch[i]==c2) r = i;
+        }
+        
+        return l>=r;
+    }
+    public int romanToInt(String s) {
+        char ch[] = {'I', 'V', 'X', 'L', 'C', 'D', 'M'};
+        int value[] = {1, 5, 10, 50, 100, 500, 1000};
+        Map <Character, Integer>tab = new HashMap<Character, Integer>();
+        
+        for(int i=0; i<7; i++)
+        {
+            tab.put(ch[i], value[i]);
+        }
+        
+        int ans = 0, n = s.length(), i;
+        for(i=0; i<n; i++)
+        {
+            char c = s.charAt(i);
+            if(i==n-1){
+                ans+=tab.get(c); continue;
+            }
+            
+            char c2 = s.charAt(i+1);
+            if(Find(c, c2, ch))
+            {
+                ans+=tab.get(c);
+            }
+            else
+            {
+                ans+=tab.get(c2); ans-=tab.get(c); i++;
+            }
+        }
+        
+        return ans;
+    }
+}
