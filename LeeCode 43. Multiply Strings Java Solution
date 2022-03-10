@@ -1,0 +1,67 @@
+class Solution {
+    
+    String Mul(String s, int v, int j)
+    {
+        int n = s.length(), carry = 0; String ret = "";
+        
+        for(int i=n-1; i>=0; i--)
+        {
+            int w = s.charAt(i) - '0'; w = w*v + carry;
+            carry = w/10; w = w%10;
+            ret+=(char)(w+'0');
+        }
+        while(carry>0)
+        {
+            int r = carry%10; carry/=10;
+            ret+=(char)(r+'0');
+        }
+        
+        StringBuilder ret1 = new StringBuilder(ret);
+        
+        ret1.reverse(); ret = new String(ret1); 
+        for(int i=0; i<j; i++) ret+='0'; return ret;
+    }
+    
+    String Add(String s1, String s2)
+    {
+        StringBuilder t1 = new StringBuilder(s1);
+        StringBuilder t2 = new StringBuilder(s2);
+        t1.reverse(); t2.reverse();
+        int n = s1.length(), m = s2.length(); int l = Math.max(n, m);
+        StringBuilder ans = new StringBuilder(""); int carry = 0;
+        
+        for(int i=0; i<l; i++)
+        {
+            int c1 = 0, c2 = 0;
+            if(i<n) c1 = t1.charAt(i) - '0';
+            if(i<m) c2 = t2.charAt(i) - '0';
+            
+            int tot = c1+c2+carry; carry = tot/10; tot = tot%10;
+            
+            ans= ans.append((char)(tot+'0'));
+        }
+        
+        if(carry>0) ans=ans.append((char)(carry+'0'));
+        ans.reverse(); String ret = new String(ans);
+        
+        return ret;
+        
+    }
+    
+    public String multiply(String num1, String num2) {
+        int n = num1.length(), m = num2.length();
+        String ans = "0";
+        
+        for(int i=m-1, j=0; i>=0; i--, j++)
+        {
+            String tmp = Mul(num1, num2.charAt(i) - '0', j);
+           // System.out.println(tmp);
+            
+            ans = Add(ans, tmp);
+        }
+        
+        if(ans.length()>1 && ans.charAt(0)=='0' && ans.charAt(1)=='0') return "0";
+        
+        return ans; 
+    }
+}
