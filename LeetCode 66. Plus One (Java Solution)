@@ -1,0 +1,26 @@
+class Solution {
+    public int[] plusOne(int[] digits) {
+        ArrayList<Integer> al = new ArrayList<Integer>();
+        int n = digits.length, i;
+        
+        int carry = 0; boolean flag = true;
+        for(i=n-1; i>=0; i--)
+        {
+            int tot = digits[i]; if(flag){tot++; flag = false; }
+            tot+=carry; carry = tot/10; tot%=10;
+            al.add(tot);
+        }
+        
+        if(carry>0) al.add(carry);
+        
+        Collections.reverse(al); int N = al.size();
+        int ans[] = new int[N];
+        
+        for(i=0; i<N; i++)
+        {
+            ans[i] = al.get(i);
+        }
+        
+        return ans;
+    }
+}
