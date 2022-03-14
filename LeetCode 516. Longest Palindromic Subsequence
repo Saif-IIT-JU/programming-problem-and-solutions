@@ -1,0 +1,32 @@
+class Solution {
+    int dp[][], n; String S;
+    
+    int solve(int l, int r)
+    {
+        if(l>r) return 0;
+        if(dp[l][r]!=-1) return dp[l][r];
+        
+        int ret = 0;
+        if(S.charAt(l)==S.charAt(r)){
+            int cnt = 1; if(l!=r) cnt++;
+            ret = Math.max(ret, cnt+solve(l+1, r-1));
+        }
+        
+        ret = Math.max(ret, solve(l+1, r));
+        ret = Math.max(ret, solve(l, r-1));
+        
+        return dp[l][r] = ret;
+    }
+    
+    public int longestPalindromeSubseq(String s) {
+        n = s.length(); dp = new int[n+9][n+9]; S = s;
+        
+        for(int i=0; i<n+9; i++)
+        {
+            for(int j=0; j<n+9; j++)
+                dp[i][j] = -1;
+        }
+        
+        return solve(0, n-1);
+    }
+}
