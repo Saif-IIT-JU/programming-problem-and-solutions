@@ -1,0 +1,37 @@
+class Solution {
+    Map<String, Integer> cache = new HashMap<String, Integer>(); String S;
+    int dp[], n;
+    
+    int solve(int i)
+    {
+        if(i>=S.length()) return 1;
+        if(dp[i]!=-1) return dp[i];
+        
+        //System.out.println(i);
+        
+        int ret = 0; String tmp = "";
+        
+        for(int j=i, k=0; j<S.length() && k<20; j++, k++)
+        {
+            tmp+=S.charAt(j);
+            //System.out.println(j + "  " + tmp);
+            
+            if(cache.get(tmp)!=null){
+                if(solve(j+1)==1) ret = 1;
+            }
+        }
+        
+        return dp[i] = ret;
+    }
+    
+    public boolean wordBreak(String s, List<String> wordDict) {
+        n = wordDict.size(); S = s; int N = s.length();
+        dp = new int[N+9];
+        for(int i=0; i<n; i++){
+            cache.put(wordDict.get(i), i);
+        }
+        
+        for(int i=0; i<N+9; i++) dp[i] = -1;
+        return solve(0)==1;
+    }
+}
