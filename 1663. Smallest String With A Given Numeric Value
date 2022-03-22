@@ -1,0 +1,20 @@
+class Solution {
+public:
+    string getSmallestString(int n, int k) {
+        int arr[n+1], i; string ans = "";
+        
+        for(i=n; i>=1; i--)
+        {
+            int tmp = min(26, k-(i-1));
+            arr[i] = tmp; k-=tmp;
+            //System.out.println(arr[i]);
+        }
+        
+        for(i=1; i<=n; i++)
+        {
+            ans+=(char)(arr[i]-1+'a');
+        }
+        
+        return ans;
+    }
+};
