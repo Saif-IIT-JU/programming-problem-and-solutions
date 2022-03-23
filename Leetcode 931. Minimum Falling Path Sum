@@ -1,0 +1,42 @@
+class Solution {
+    int n; int dp[][], vis[][], mat[][];
+    
+    int solve(int x, int y)
+    {
+        if(x>=n) return 0;
+        if(y<0 || y>=n) return 1000000000;
+        if(vis[x][y]!=-1) return dp[x][y];
+        
+        int ret = 1000000000;
+        
+        ret = Math.min(ret, mat[x][y]+solve(x+1, y));
+        ret = Math.min(ret, mat[x][y]+solve(x+1, y+1));
+        ret = Math.min(ret, mat[x][y]+solve(x+1, y-1));
+        
+        //System.out.println(x + " " + y + " " + ret);
+        vis[x][y] = 1;
+        return dp[x][y] = ret;
+    }
+    public int minFallingPathSum(int[][] matrix) {
+        n = matrix.length; 
+        dp = new int[n+9][n+9]; vis = new int[n+9][n+9];
+        mat = new int[n+9][n+9];
+        for(int i=0; i<n+9; i++)
+        {
+            for(int j=0; j<n; j++)
+            {
+                vis[i][j] = -1;
+                if(i<n && j<n) mat[i][j] = matrix[i][j];
+            }
+        }
+        
+        int ans = 1000000000;
+        for(int i=0; i<n; i++)
+        {
+            ans = Math.min(ans, solve(0,i));
+           // System.out.println(ans);
+        }
+        
+        return ans;
+    }
+}
