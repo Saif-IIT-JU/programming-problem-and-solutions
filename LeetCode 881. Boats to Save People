@@ -1,0 +1,23 @@
+class Solution {
+public:
+    int numRescueBoats(vector<int>& people, int limit) {
+        multiset<int> st;
+        for(int i=0; i<people.size(); i++)
+        {
+            st.insert(people[i]);
+        }
+        
+        int ans = 0;
+        while(st.size()>0){
+            int x = *st.begin(); st.erase(st.begin());
+            ans++; if(st.size()==0) break;
+            set<int>::iterator itr;
+            if((*st.begin()) > limit-x) continue;
+            itr = st.upper_bound(limit-x); itr--;
+            
+            st.erase(itr);
+        }
+        
+        return ans;
+    }
+};
