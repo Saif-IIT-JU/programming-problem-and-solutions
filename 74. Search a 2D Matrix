@@ -1,0 +1,29 @@
+class Solution {
+    public boolean searchMatrix(int[][] matrix, int target) {
+        int r=-1, c=-1, low, high, mid, n = matrix.length, m = matrix[0].length;
+        
+        low = 0; high = n-1;
+        while(low<=high){
+            mid = (low+high)/2;
+            if(target<=matrix[mid][m-1])
+            {
+                r = mid; high = mid-1;
+            }
+            else low = mid+1;
+        }
+        
+        if(r==-1) return false;
+        
+        low = 0; high = m-1;
+        while(low<=high){
+            mid = (low+high)/2;
+            if(target==matrix[r][mid]) return true;
+            else if(target<matrix[r][mid])
+                high = mid-1;
+            else
+                low = mid+1;
+        }
+        
+        return false;
+    }
+}
