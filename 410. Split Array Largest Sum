@@ -1,0 +1,32 @@
+class Solution {
+    int num[], dp[][], n;
+    int solve(int i, int m)
+    {
+        if(i>=n){
+            if(m==0) return 0;
+            else return  2000000000;
+        }
+        if(m<=0) return 2000000000;
+        
+        if(dp[i][m]!=-1) return dp[i][m];
+        
+        int ret = 2000000000, tot = 0;
+        for(int j=i; j<n; j++)
+        {
+            tot += num[j];
+            ret = Math.min(ret, Math.max(tot, solve(j+1, m-1)));
+        }
+        
+        return dp[i][m] = ret;
+    }
+    public int splitArray(int[] nums, int m) {
+        n = nums.length; dp = new int[n+1][m+1]; num = nums;
+        for(int i=0; i<=n; i++)
+        {
+            for(int j=0; j<=m; j++)
+                dp[i][j] = -1;
+        }
+        
+        return solve(0, m);
+    }
+}
