@@ -1,0 +1,28 @@
+class Solution {
+    boolean vowel(char c)
+    {
+        String s = "aAeEiIoOuU";
+        for(int i=0; i<s.length(); i++)
+        {
+            if(s.charAt(i)==c) return true;
+        }
+        return false;
+    }
+    public String reverseVowels(String s) {
+        int l = 0, r = s.length()-1;
+        StringBuffer S = new StringBuffer(s);
+        while(l<=r)
+        {
+            while(l<=r && vowel(S.charAt(l))==false) l++;
+            while(l<=r && vowel(S.charAt(r))==false) r--;
+            //System.out.println(l + " " + r);
+            if(l>=r) break;
+            char c = S.charAt(l);
+            S.setCharAt(l, S.charAt(r)); S.setCharAt(r, c);
+            
+            l++; r--;
+        }
+        
+        return new String(S);
+    }
+}
