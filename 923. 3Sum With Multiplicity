@@ -1,0 +1,51 @@
+class Solution {
+    int MOD = 1000000007; 
+    public int threeSumMulti(int[] arr, int target) {
+        long ans = 0; int n = arr.length, i, j, k;
+        long cnt[] = new long[109];
+        
+        for(i=0; i<n; i++) cnt[arr[i]]++;
+        
+        for(i=0; i<=100; i++)
+        {
+            for(j=i+1; j<=100; j++)
+            {
+                k = target - i - j;
+                if(k<=100 && j<k) ans = (ans+cnt[i]*cnt[j]*cnt[k])%MOD;
+            }
+        }
+        
+       // System.out.println(ans);
+        
+        for(i=0; i<=100; i++)
+        {
+            k = target-2*i;
+            if(i<k && k<=100) ans = (ans + cnt[k]*(cnt[i]*(cnt[i]-1))/2)%MOD;
+        }
+        
+       // System.out.println(ans);
+        
+        for(i=0; i<=100; i++)
+        {
+            if(i%2==target%2)
+            {
+                k = (target-i)/2;
+                if(k<=100 && i<k)
+                    ans = (ans+ cnt[i]*(cnt[k]*(cnt[k]-1)/2))%MOD;
+            }
+        }
+        
+       // System.out.println(ans);
+        
+        if(target%3==0)
+        {
+            k = target/3;
+            if(k>=0 && k<=100) ans+=(cnt[k]*(cnt[k]-1)*(cnt[k]-2))/6;
+            ans%=MOD;
+        }
+        
+        //System.out.println(ans);
+        
+        return (int)ans;
+    }
+}
