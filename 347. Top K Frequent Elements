@@ -1,0 +1,48 @@
+class Pair implements Comparable<Pair>
+{
+    int val, fr;
+    Pair(int v, int f)
+    {
+        val = v;
+        fr = f;
+    }
+    
+    public int compareTo(Pair ob)
+    {
+        return fr - ob.fr;
+    }
+}
+class Solution {
+    public int[] topKFrequent(int[] nums, int k) {
+        if(nums.length==k) return nums;
+        TreeMap<Integer, Integer>map = new TreeMap<Integer, Integer>();
+        
+        for(int x : nums)
+        {
+            if(map.get(x)==null)
+                map.put(x, 1);
+            else map.put(x, map.get(x)+1);
+        }
+        
+        PriorityQueue<Pair>pq = new PriorityQueue<Pair>();
+        Iterator itr = map.entrySet().iterator();
+        int ans[] = new int[k]; int idx = 0;
+        while(itr.hasNext())
+        {
+            Map.Entry e = (Map.Entry)itr.next();
+            //System.out.println(e.getKey() + " " + e.getValue());
+            pq.add(new Pair((int)e.getKey(), (int)e.getValue()));
+            if(pq.size()>k){
+                pq.poll();
+            }
+        }
+        
+        while(pq.size()>0)
+        {
+            Pair x = pq.poll();
+            ans[idx++] = x.val;
+        }
+        
+        return ans;
+    }
+}
