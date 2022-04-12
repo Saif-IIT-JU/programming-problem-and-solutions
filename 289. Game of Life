@@ -1,0 +1,47 @@
+class Solution {
+    int dr[] = { 0,  0, +1, -1, -1, -1, +1, +1};;
+    int dc[] = {+1, -1,  0,  0, -1, +1, -1, +1};
+    public void gameOfLife(int[][] board) {
+        int n = board.length, m = board[0].length, i, j;
+        
+        for(i=0; i<n; i++)
+        {
+            for(j=0; j<m; j++)
+            {
+                int cnt = 0;
+                
+                for(int k=0; k<8; k++)
+                {
+                    int r = i+dr[k], c = j+dc[k];
+                    if(r>=0 && r<n && c>=0 && c<m){
+                        int state = board[r][c];
+                        if(state>=10){
+                            if(state==11) cnt++;
+                        }
+                        else cnt+=state;
+                    }
+                }
+                
+                if(board[i][j]==0){
+                    if(cnt==3) board[i][j]+=10;
+                }
+                else{
+                    if(cnt>3) board[i][j]+=10;
+                    else if(cnt==2 || cnt==3) ;
+                    else board[i][j]+=10;
+                }
+            }
+        }
+        
+        for(i=0; i<n; i++)
+        {
+            for(j=0; j<m; j++)
+            {
+                if(board[i][j]>=10){
+                    if(board[i][j]==10) board[i][j] = 1;
+                    else board[i][j] = 0;
+                }
+            }
+        }
+    }
+}
