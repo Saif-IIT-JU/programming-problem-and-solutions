@@ -1,0 +1,31 @@
+class Solution {
+public:
+    int maximumScore(vector<int>& scores, vector<vector<int>>& edges) {
+        int n = scores.size();
+        vector<pair<int,int>>adj[n];
+        
+        for(int i=0; i<edges.size(); i++)
+        {
+            int x = edges[i][0], y = edges[i][1];
+            adj[x].push_back({scores[y],y});
+            adj[y].push_back({scores[x],x});
+        }
+        for(int i=0; i<n; i++)
+        {
+            sort(adj[i].rbegin(), adj[i].rend());
+        }
+        
+        int res = -1;
+        for(int i=0; i<edges.size(); i++)
+        {
+            int x = edges[i][0], y = edges[i][1];
+            
+            for(int i=0; i<3 && i<adj[x].size(); i++) if(adj[x][i].second!=y)
+                for(int j=0; j<3 && j<adj[y].size(); j++) if(adj[y][j].second!=x)
+                    if(adj[x][i].second != adj[y][j].second)
+                        res = max(res, scores[x] + scores[y] + scores[adj[x][i].second] + scores[adj[y][j].second]);
+        }
+        
+        return res;
+    }
+};
