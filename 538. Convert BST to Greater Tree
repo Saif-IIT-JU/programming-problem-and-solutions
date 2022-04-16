@@ -1,0 +1,34 @@
+class Solution {
+    HashMap<Integer, Integer>map = new HashMap<Integer, Integer>();
+    ArrayList<Integer>al = new ArrayList<Integer>();
+    
+    void inOrder(TreeNode root)
+    {
+        if(root==null) return;
+        inOrder(root.left);
+        al.add(root.val);
+        inOrder(root.right);
+    }
+    void traverse(TreeNode root)
+    {
+        if(root==null) return;
+        root.val = map.get(root.val);
+        traverse(root.left);
+        traverse(root.right);
+    }
+    
+    public TreeNode convertBST(TreeNode root) {
+        inOrder(root); int n = al.size();
+        for(int i=n-1; i>=0; i--)
+        {
+            if(i==n-1)
+                map.put(al.get(i), al.get(i));
+            else{
+                map.put(al.get(i), al.get(i)+al.get(i+1));
+                al.set(i, al.get(i) + al.get(i+1));
+            }
+        }
+        
+        traverse(root); return root;
+    }
+}
