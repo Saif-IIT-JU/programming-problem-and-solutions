@@ -1,0 +1,52 @@
+class Solution {
+    int n, m, vis[][], cnt;
+    int dx[] = {0, 0, 1, -1};
+    int dy[] = {1, -1, 0, 0};
+    
+    boolean isValid(int r, int c)
+    {
+        if(r>=0 && r<n && c>=0 && c<m) return true;
+        
+        return false;
+    }
+    void dfs(int x, int y, int [][]grid)
+    {
+        vis[x][y] = 1; cnt++;
+        
+        for(int k=0; k<4; k++)
+        {
+            int r = x + dx[k];
+            int c = y + dy[k];
+            
+            if(isValid(r, c) && vis[r][c]==0 && grid[r][c]==1)
+                dfs(r, c, grid);
+        }
+    }
+    
+    public int maxAreaOfIsland(int[][] grid) {
+        n = grid.length; m = grid[0].length;
+        
+        vis = new int[n][m];
+        for(int i=0; i<n; i++)
+        {
+            for(int j=0; j<m; j++)
+                vis[i][j] = 0;
+        }
+        
+        int ans = 0;
+        
+        for(int i=0; i<n; i++)
+        {
+            for(int j=0; j<m; j++)
+            {
+                if(vis[i][j]==0 && grid[i][j]==1)
+                {
+                    cnt = 0; dfs(i, j, grid);
+                    ans = Math.max(ans, cnt);
+                }
+            }
+        }
+        
+        return ans;
+    }
+}
