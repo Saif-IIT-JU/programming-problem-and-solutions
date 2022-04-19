@@ -1,0 +1,28 @@
+class Solution {
+    public int[][] matrixBlockSum(int[][] mat, int k) {
+        int n = mat.length, m = mat[0].length, i, j;
+        int dp[][] = new int[n+1][m+1];
+        int ans[][] = new int[n][m];
+        
+        for(i=1; i<=n; i++)
+        {
+            for(j=1; j<=m; j++)
+            {
+                dp[i][j] = mat[i-1][j-1] + dp[i-1][j] + dp[i][j-1] - dp[i-1][j-1];
+            }
+        }
+        
+        for(i=1; i<=n; i++)
+        {
+            for(j=1; j<=m; j++)
+            {
+                int r = Math.max(1, i-k), c = Math.max(1, j-k);
+                int x = Math.min(n, i+k), y = Math.min(m, j+k);
+                
+                ans[i-1][j-1] = dp[x][y] - dp[r-1][y] - dp[x][c-1] + dp[r-1][c-1];
+            }
+        }
+        
+        return ans;
+    }
+}
