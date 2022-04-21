@@ -1,0 +1,41 @@
+class Solution {
+    int dp[][], prices[], n, inf = 99999999;
+    int vis[][];
+    
+    int solve(int i, int f)
+    {
+        if(i>=n){
+            if(f==0) return 0;
+            else return -inf;
+        }
+        if(vis[i][f]!=-1) return dp[i][f];
+        
+        int prf = -1111111;
+        if(f==1)
+        {
+            prf = Math.max(prf, prices[i]+solve(i+2, 0));
+            prf = Math.max(prf, solve(i+1, f));
+        }
+        else{
+            prf = Math.max(prf, solve(i+1, f));
+            prf = Math.max(prf, -prices[i] + solve(i+1, 1));
+        }
+        
+        vis[i][f] = 1;
+        return dp[i][f] = prf;
+    }
+    
+    public int maxProfit(int[] prices) {
+        n = prices.length;
+        dp = new int[n+1][2]; this.prices = new int[n];
+        vis = new int[n+1][2];
+        
+        for(int i=0; i<=n; i++)
+        {
+            if(i<n) this.prices[i] = prices[i];
+            vis[i][0] = vis[i][1] = -1;
+        }
+        
+        return solve(0, 0);
+    }
+}
