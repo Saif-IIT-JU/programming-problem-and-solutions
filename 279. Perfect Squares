@@ -1,0 +1,39 @@
+class Solution {
+    ArrayList<Integer>squares = new ArrayList<Integer>();
+    int dp[][];
+    
+    public void generator(int n)
+    {
+        for(int i = 1; i*i<=n; i++)
+            squares.add(i*i);
+    }
+    
+    public int solve(int i, int n)
+    {
+        if(n==0) return 0;
+        if(i>=squares.size() || n<0) return 1000000;
+        
+        if(dp[i][n]!=-1) return dp[i][n];
+        
+        int ret = 1000000;
+        
+        if(n>=squares.get(i))
+            ret = Math.min(ret, 1+solve(i, n-squares.get(i)));
+        ret = Math.min(ret, solve(i+1, n));
+        
+        return dp[i][n] = ret;
+    }
+    
+    public int numSquares(int n) {
+        generator(n); int sz = squares.size();
+        dp = new int[sz+1][n+2];
+        
+        for(int i=0; i<=sz; i++)
+        {
+            for(int j=0; j<=n; j++)
+                dp[i][j] = -1;
+        }
+        
+        return solve(0, n);
+    }
+}
