@@ -1,0 +1,22 @@
+class MyHashSet {
+    
+    boolean tab[];
+
+    public MyHashSet() {
+        tab = new boolean[1000009];
+        for(int i=0; i<1000009; i++)
+            tab[i] = false;
+    }
+    
+    public void add(int key) {
+        tab[key] = true;
+    }
+    
+    public void remove(int key) {
+        tab[key] = false;
+    }
+    
+    public boolean contains(int key) {
+        return tab[key];
+    }
+}
