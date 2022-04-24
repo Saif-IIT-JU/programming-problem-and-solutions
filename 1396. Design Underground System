@@ -1,0 +1,23 @@
+class UndergroundSystem {
+    map<int,pair<string,int> >IN;
+    map<pair<string,string>,pair<int,int> >Mp;
+public:
+    UndergroundSystem() {
+        IN.clear(); Mp.clear();
+    }
+    
+    void checkIn(int id, string stationName, int t) {
+        IN[id] = make_pair(stationName, t);
+    }
+    
+    void checkOut(int id, string stationName, int t) {
+        Mp[make_pair(IN[id].first,stationName)] = make_pair(Mp[make_pair(IN[id].first,stationName)].first+t-IN[id].second,Mp[make_pair(IN[id].first,stationName)].second+1);
+    }
+    
+    double getAverageTime(string startStation, string endStation) {
+        double tot = Mp[make_pair(startStation, endStation)].first;
+        double T = Mp[make_pair(startStation, endStation)].second;
+        
+        return tot/T;
+    }
+};
