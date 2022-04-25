@@ -1,0 +1,18 @@
+class Solution {
+    public char nextGreatestLetter(char[] letters, char target) {
+        int l = 0, r = letters.length-1, mid; char c = ' ';
+        while(l<=r)
+        {
+            mid = (l+r)/2;
+            if(letters[mid]>target)
+            {
+                c = letters[mid]; r = mid-1;
+            }
+            else l = mid+1;
+        }
+        
+        if(c==' ') c = letters[0];
+        
+        return c;
+    }
+}
