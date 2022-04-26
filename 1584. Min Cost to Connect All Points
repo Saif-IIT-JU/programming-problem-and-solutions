@@ -1,0 +1,70 @@
+class Solution {
+public:
+    struct edge
+    {
+        int u, v, w;
+        edge(int u_, int v_, int w_)
+        {
+            u = u_, v = v_, w = w_;
+        }
+        bool operator <(const edge &e)const
+        {
+            return w < e.w;
+        }
+    };
+    
+    int par[1009], sz[1009];
+    
+    int Find(int p)
+    {
+        if(par[p]==p) return p;
+        
+        return par[p] = Find(par[p]);
+    }
+    
+    void Union(int x, int y)
+    {
+        if(sz[x]<sz[y]) {
+            par[x] = y; sz[x]+=sz[y];
+        }
+        else{
+            par[y] = x; sz[y]+=sz[x];
+        }
+        return;
+    }
+    
+    int getDis(vector<int>p1, vector<int>p2)
+    {
+        return abs(p1[0]-p2[0]) + abs(p1[1]-p2[1]);
+    }
+    
+    int minCostConnectPoints(vector<vector<int>>& points) {
+        vector<edge> edges; int n = points.size();
+        for(int i=0; i<n; i++)
+        {
+            for(int j=i+1; j<n; j++)
+            {
+                int dis = getDis(points[i], points[j]);
+                edges.push_back(edge(i, j, dis));
+            }
+        }
+        
+        sort(edges.begin(), edges.end());
+        for(int i=0; i<n; i++){ par[i] = i; sz[i] = 0; }
+        
+        int ans = 0;
+        
+        for(int i=0; i<edges.size(); i++)
+        {
+            int u = Find(edges[i].u);
+            int v = Find(edges[i].v);
+            int w = edges[i].w;
+            
+            if(u!=v){
+                ans+=w; Union(u, v);
+            }
+        }
+        
+        return ans;
+    }
+};
