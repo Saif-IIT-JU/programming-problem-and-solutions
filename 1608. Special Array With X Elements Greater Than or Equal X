@@ -1,0 +1,24 @@
+class Solution {
+    public int specialArray(int[] nums) {
+        int l = 1, r = 1000, mid, ans = -1;
+        
+        while(l<=r)
+        {
+            mid = (l+r)/2; int cnt = 0, i;
+            
+            for(i=0; i<nums.length; i++)
+            {
+                if(nums[i]>=mid) cnt++;
+            }
+            
+            if(cnt==mid){
+                return mid;
+            }
+            else if(cnt<mid)
+                r = mid-1;
+            else l = mid+1;
+        }
+        
+        return ans;
+    }
+}
