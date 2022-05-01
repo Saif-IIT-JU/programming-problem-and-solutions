@@ -1,0 +1,5 @@
+SELECT actor_id, director_id from(
+    
+    SELECT actor_id, director_id, count(*) as c from ActorDirector group by actor_id, director_id
+    
+) as temp where c>=3;
