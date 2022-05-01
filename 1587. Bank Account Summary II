@@ -1,0 +1,5 @@
+SELECT name, balance from(
+
+select u.name, SUM(amount) as balance from Users u JOIN Transactions t on u.account=t.account group by u.name
+    
+) as temp where balance>=10000;
