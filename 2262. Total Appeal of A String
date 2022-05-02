@@ -1,0 +1,16 @@
+class Solution {
+public:
+    long long appealSum(string s) {
+        long long ans = 1, curr = 1, pos[26];
+        for(int i=0; i<26; i++) pos[i] = -1;
+        pos[s[0]-'a'] = 0;
+        for(int i=1; i<s.size(); i++)
+        {
+            curr += i-pos[s[i]-'a'];
+            ans+=curr;
+            pos[s[i]-'a'] = i;
+        }
+        
+        return ans;
+    }
+};
