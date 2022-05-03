@@ -1,0 +1,36 @@
+class Solution {
+    public int[] sortedSquares(int[] nums) {
+        int n = nums.length, l, r, i, idx=0; int ans[] = new int[n];
+        int mn = Integer.MAX_VALUE;
+        for(i=0; i<n; i++){
+            if(Math.abs(nums[i])<mn){
+                mn = Math.abs(nums[i]); idx = i;
+            }
+        }
+        
+        ans[0] = nums[idx]*nums[idx];
+        l = idx-1; r = idx+1; i = 0;
+        while(true)
+        {
+            if(l<0 && r>=n) break;
+            else if(l<0){
+                ans[++i] = nums[r]*nums[r];
+                r++;
+            }
+            else if(r>=n)
+            {
+                ans[++i] = nums[l]*nums[l];
+                l--;
+            }
+            else if(Math.abs(nums[l]) < Math.abs(nums[r]))
+            {
+                ans[++i] = nums[l]*nums[l]; l--;
+            }
+            else{
+                ans[++i] = nums[r]*nums[r]; r++;
+            } 
+        }
+        
+        return ans;
+    }
+}
