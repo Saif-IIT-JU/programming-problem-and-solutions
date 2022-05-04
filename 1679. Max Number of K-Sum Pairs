@@ -1,0 +1,39 @@
+class Solution {
+    public int maxOperations(int[] nums, int k) {
+        HashMap<Integer, Integer>tab = new HashMap<Integer, Integer>();
+        
+        for(int i=0; i<nums.length; i++)
+        {
+            int x = nums[i];
+            if(tab.get(x)==null)
+            {
+                tab.put(x, 1);
+            }
+            else{
+                tab.put(x, tab.get(x)+1);
+            }
+        }
+        
+        int ans = 0;
+        
+        for(int i=0; i<nums.length; i++)
+        {
+            int x = nums[i]; int y = k-nums[i];
+            int x_cnt = tab.get(x), y_cnt = 0;
+            if(tab.get(y)!=null) y_cnt = tab.get(y);
+            
+            if(x==y){
+                int temp = x_cnt/2; tab.put(x, x_cnt-temp*2);
+                ans+=temp;
+            }
+            else{
+                int temp = Math.min(x_cnt, y_cnt);
+                tab.put(x, x_cnt-temp);
+                tab.put(y, y_cnt-temp);
+                ans+=temp;
+            }
+        }
+        
+        return ans;
+    }
+}
