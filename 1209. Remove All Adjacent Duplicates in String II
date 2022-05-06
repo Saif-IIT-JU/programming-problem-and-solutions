@@ -1,0 +1,49 @@
+class Pair
+{
+    char c; int freq;
+    Pair(char c, int freq)
+    {
+        this.c = c;
+        this.freq = freq;
+    }
+}
+
+class Solution {
+    public String removeDuplicates(String s, int k) {
+        int n = s.length(); Stack<Pair>stk = new Stack<Pair>();
+        
+        for(int i=0; i<n; i++)
+        {
+            char c = s.charAt(i);
+            
+            if(stk.size()==0){
+                stk.add(new Pair(c, 1));
+            }
+            else{
+                Pair p = stk.peek();
+                if(p.c==c){
+                    stk.add(new Pair(c, p.freq+1));
+                }
+                else{
+                    stk.add(new Pair(c, 1));
+                }
+            }
+            
+            if(stk.size()>1){
+                if(stk.peek().freq==k){
+                    for(int j=0; j<k; j++){
+                        stk.pop();
+                    }
+                }
+            }
+        }
+        
+        StringBuffer sb = new StringBuffer();
+        while(!stk.isEmpty()){
+            sb.append(stk.peek().c); stk.pop();
+        }
+        sb.reverse();
+        String ans = new String(sb);
+        return ans;
+    }
+}
