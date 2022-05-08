@@ -1,0 +1,33 @@
+class Solution {
+    public int smallestDivisor(int[] nums, int threshold) {
+        int l = 1, r = 1000009, mid, ans=-1;
+        
+        while(l<=r)
+        {
+            mid = (l+r)/2;
+            if(isOk(nums, mid, threshold))
+            {
+                ans = mid; r = mid-1;
+            }
+            else l = mid+1;
+        }
+        
+        return ans;
+    }
+    
+    public boolean isOk(int[] nums, int x, int threshold)
+    {
+        int sum = 0;
+        for(int i=0; i<nums.length; i++)
+        {
+            sum+=divide(nums[i], x);
+        }
+        return sum<=threshold;
+    }
+    
+    public int divide(int x, int y)
+    {
+        if(x%y==0) return x/y;
+        return 1+x/y;
+    }
+}
