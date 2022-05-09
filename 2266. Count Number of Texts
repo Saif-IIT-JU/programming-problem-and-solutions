@@ -1,0 +1,46 @@
+class Solution {
+    int len[] = {3, 3, 3, 3, 3, 4, 3, 4};
+    int dp[][] = new int[100009][9];
+    long MOD = 1000000007;
+    
+    public int countTexts(String pressedKeys) {
+        init(); int n = pressedKeys.length();
+        
+        long ans = 1;
+        for(int i=0; i<n; )
+        {
+            int j = i, cnt = 0;
+            while(j<n && pressedKeys.charAt(j)==pressedKeys.charAt(i))
+            {
+                j++; cnt++;
+            }
+            ans*=go(cnt, pressedKeys.charAt(i)-'2'); i = j;
+            ans%=MOD;
+        }
+        
+        return (int)ans;
+    }
+    
+    public int go(int tot, int key)
+    {
+        if(tot==0) return 1;
+        if(dp[tot][key]!=-1) return dp[tot][key];
+        
+        int ret = 0;
+        for(int i=1; i<=Math.min(tot, len[key]); i++)
+        {
+            ret+=go(tot-i, key); ret%=MOD;
+        }
+        
+        return dp[tot][key] = ret;
+    }
+    
+    public void init()
+    {
+        for(int i=0; i<100009; i++)
+        {
+            for(int j=0; j<9; j++)
+                dp[i][j] = -1;
+        }
+    }
+}
