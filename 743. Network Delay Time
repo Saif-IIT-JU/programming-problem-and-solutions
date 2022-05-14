@@ -1,0 +1,69 @@
+class Pair implements Comparable<Pair>
+{
+    int v, w;
+    Pair(){}
+    Pair(int v_, int w_)
+    {
+        v = v_; w = w_;
+    }
+    
+    public int compareTo(Pair ob)
+    {
+        return this.w - ob.w;
+    }
+}
+class Solution {
+    ArrayList<ArrayList<Pair>>adj = new ArrayList<ArrayList<Pair>>();
+    int inf = 1000000009, dis[];
+    public int networkDelayTime(int[][] times, int n, int k) {
+        init(times, n); bfs(k); 
+        
+        int ans = 0;
+        for(int i=1; i<=n; i++)
+        {
+            if(dis[i]==inf) return -1;
+            ans = Math.max(ans, dis[i]);
+        }
+        
+        return ans;
+    }
+    
+    public void init(int[][] times, int n)
+    {
+        dis = new int[n+2];
+        for(int i=0; i<=n; i++)
+        {
+            ArrayList<Pair>al = new ArrayList<Pair>();
+            adj.add(al); dis[i] = inf;
+        }
+        
+        for(int i=0; i<times.length; i++)
+        {
+            int u = times[i][0], v = times[i][1], w = times[i][2];
+            
+            adj.get(u).add(new Pair(v, w));
+        }
+    }
+    
+    public void bfs(int s)
+    {
+        dis[s] = 0;
+        PriorityQueue<Pair>pq = new PriorityQueue<Pair>();
+        pq.add(new Pair(s, 0));
+        
+        while(pq.size()>0)
+        {
+            Pair u = pq.peek(); pq.poll();
+            //System.out.println(u.v + " " + dis[u.v]);
+            
+            for(int i=0; i<adj.get(u.v).size(); i++)
+            {
+                Pair v = adj.get(u.v).get(i);
+                if(u.w + v.w < dis[v.v]){
+                    dis[v.v] = u.w + v.w;
+                    pq.add(new Pair(v.v, dis[v.v]));
+                }
+            }
+        }
+    }
+}
