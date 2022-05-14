@@ -1,0 +1,78 @@
+class Pair implements Comparable<Pair>
+{
+    int x, y, w;
+    Pair(){}
+    Pair(int x, int y, int w)
+    {
+        this.x = x; this.y = y; this.w = w;
+    }
+    
+    public int compareTo(Pair ob)
+    {
+        return this.w - ob.w;
+    }
+}
+
+class Solution {
+    int dx[] = {0, 0, 1, -1};
+    int dy[] = {1, -1, 0, 0};
+    
+    public int orangesRotting(int[][] grid) {
+        int n = grid.length, m = grid[0].length, i, j;
+        int dis[][] = new int[n][m];
+        PriorityQueue<Pair>pq = new PriorityQueue<Pair>();
+        
+        for(i=0; i<n; i++)
+        {
+            for(j=0; j<m; j++)
+            {
+                dis[i][j] = Integer.MAX_VALUE;
+                if(grid[i][j]==2){
+                    pq.add(new Pair(i, j, 0));
+                    dis[i][j] = 0;
+                }
+            }
+        }
+        
+        while(pq.size()>0)
+        {
+            Pair u = pq.peek(); pq.poll();
+            
+            for(int k=0; k<4; k++)
+            {
+                int x = u.x + dx[k];
+                int y = u.y + dy[k];
+                
+                if(isOk(x, y, n, m) && grid[x][y]==1)
+                {
+                    if(dis[u.x][u.y]+1 < dis[x][y])
+                    {
+                        dis[x][y] = dis[u.x][u.y]+1;
+                        pq.add(new Pair(x, y, dis[x][y]));
+                    }
+                }
+            }
+        }
+        
+        int ans = 0;
+        for(i=0; i<n; i++)
+        {
+            for(j=0; j<m; j++)
+            {
+                if(grid[i][j]==1)
+                {
+                    if(dis[i][j]==Integer.MAX_VALUE) return -1;
+                    ans = Math.max(ans, dis[i][j]);
+                }
+            }
+        }
+        
+        return ans;
+    }
+    
+    boolean isOk(int x, int y, int n, int m)
+    {
+        if(x>=0 && x<n && y>=0 && y<m) return true;
+        return false;
+    }
+}
