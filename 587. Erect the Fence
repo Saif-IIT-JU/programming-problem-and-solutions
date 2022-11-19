@@ -1,0 +1,89 @@
+class Solution {
+
+    int[][] trees;
+
+    public int[][] outerTrees(int[][] trees) {
+        this.trees = trees;
+
+        return findHull(trees);
+    }
+
+    private int[][] findHull(int[][] trees) {
+        int n = trees.length;
+        if(n < 3) {
+            return trees;
+        }
+
+        int l = 0;
+        for(int i = 0; i < n; i++) {
+            if(trees[i][0] < trees[i][0]) {
+                l = i;
+            }
+            else if(trees[i][0] == trees[i][0] && trees[i][1] < trees[l][1]) {
+                l = i;
+            }
+        }
+
+        int p = l, q;
+        List<Integer>hull = new ArrayList<>();
+
+        do{
+            hull.add(p);
+            q = (p + 1) % n;
+
+            for(int i = 0; i < n; i++) {
+                if(orientation(p, i, q) == 2){
+                    q = i;
+                }
+                else if(p != i && orientation(p, i, q) == 0 && onSegment(p, q, i)){
+                    q = i;
+                }
+            }
+            
+            p = q;
+        } while(p != l);
+
+        int m = hull.size();
+
+        for(int i = 0; i < m; i++) {
+            p = hull.get(i);
+            q = hull.get((i + 1) % m);
+
+
+            if(q == 0 && m < 3) continue;
+
+            for(int j = 0; j < n; j++) {
+                if(j != p && j != q && orientation(p, j, q) == 0 && onSegment(p, j, q)){
+                    hull.add(j);
+                }
+            }
+        }
+
+        m = hull.size();
+
+        int[][] ret = new int[m][2];
+
+        for(int i = 0; i < m; i++) {
+            ret[i] = trees[hull.get(i)];
+        }
+
+        return ret;
+    }
+
+    int orientation(int p, int q, int r) {
+        int o = trees[p][0] * (trees[q][1] - trees[r][1]) - 
+                trees[p][1] * (trees[q][0] - trees[r][0]) + 
+                trees[q][0] * trees[r][1] - trees[r][0] * trees[q][1];
+        if(o < 0) o = 1;
+        else if(o > 0) o = 2;
+
+        return o;
+    }
+
+    boolean onSegment(int p, int q, int r) {
+        return trees[q][0] >= Math.min(trees[p][0], trees[r][0]) &&
+               trees[q][0] <= Math.max(trees[p][0], trees[r][0]) &&
+               trees[q][1] >= Math.min(trees[p][1], trees[r][1]) &&
+               trees[q][1] <= Math.max(trees[p][1], trees[r][1]);
+    }
+}
