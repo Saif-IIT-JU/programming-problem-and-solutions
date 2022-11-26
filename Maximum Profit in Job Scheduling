@@ -1,0 +1,84 @@
+class Job {
+    
+    private int startTime;
+    private int endTime;
+    private int profit;
+    
+    Job () {}
+    
+    Job (int startTime, int endTime, int profit) {
+        this.startTime = startTime;
+        this.endTime = endTime;
+        this.profit = profit;
+    }
+    
+    public int getStartTime() {
+        return startTime;
+    }
+    
+    public int getEndTime() {
+        return endTime;
+    }
+    
+    public int getProfit() {
+        return profit;
+    }
+}
+
+class Solution {
+    
+    List<Job> jobs;
+    int[] dp;
+    int n;
+    
+    public int jobScheduling (int[] startTime, int[] endTime, int[] profit) {
+        n = startTime.length;
+        jobs = new ArrayList<>();
+        dp = new int[n+9];
+        
+        for (int i = 0; i < n; i++) {
+            jobs.add (new Job(startTime[i], endTime[i], profit[i]));
+        }
+        
+        Collections.sort(jobs, (j1, j2) -> { return j1.getStartTime() - j2.getStartTime(); });
+        
+        for (int i = 0; i < n + 9; i++) {
+            dp[i] = -1;
+        }
+        
+        return solve(0);
+    }
+    
+    private int solve(int idx) {
+        if (idx >= n) {
+            return 0;
+        }
+        
+        if(dp[idx] != -1) {
+            return dp[idx];
+        }
+        
+        int ret = solve (idx + 1);
+        ret = Math.max(ret, jobs.get(idx).getProfit() + solve (findNextJob(jobs.get(idx).getEndTime())));
+        
+        return dp[idx] = ret;
+    }
+    
+    private int findNextJob(int time) {
+        int l = 0, r = n - 1, ret = n;
+        
+        while (l <= r) {
+            int mid = (l + r) / 2;
+            
+            Job job = jobs.get(mid);
+            if (job.getStartTime() >= time) {
+                ret = mid;
+                r = mid - 1;
+            } else {
+                l = mid + 1;
+            }
+        }
+        
+        return ret;
+    }
+}
