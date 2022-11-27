@@ -1,0 +1,56 @@
+class Solution {
+    
+    private int mod = 1_000_000_007;
+    
+    public int countPalindromes(String s) {
+        int n = s.length();
+        int[][][] dp, revDp;
+        dp = new int[n+9][10][10];
+        revDp = new int[n+9][10][10];
+        
+        for (int f = 0; f <= 9; f++) {
+            for (int se = 0; se <= 9; se++) {
+                int cnt = 0;
+                for (int i = 1; i <= n; i++) {
+                    if (s.charAt(i-1) - '0' != se) {
+                        dp[i][f][se] = dp[i-1][f][se];
+                    } else {
+                        dp[i][f][se] = (cnt + dp[i-1][f][se]) % mod;
+                    }
+                    
+                    if (s.charAt(i-1) - '0' == f) {
+                        cnt++;
+                    }
+                }
+            }
+        }
+        
+        for (int f = 0; f <= 9; f++) {
+            for (int se = 0; se <= 9; se++) {
+                int cnt = 0;
+                for (int i = n; i > 0; i--) {
+                    if (s.charAt(i-1) - '0' != f) {
+                        revDp[i][f][se] = revDp[i+1][f][se];
+                    } else {
+                        revDp[i][f][se] = (cnt + revDp[i+1][f][se]) % mod;
+                    }
+                    
+                    if (s.charAt(i-1) - '0' == se) {
+                        cnt++;
+                    }
+                }
+            }
+        }
+        
+        int ans = 0;
+        for(int i = 1; i <= n; i++) {
+            for(int f = 0; f <= 9; f++) {
+                for(int se = 0; se <= 9; se++) {
+                    ans = (int) (ans + ((long) dp[i-1][f][se] * (long) revDp[i+1][se][f]) % mod) % mod;
+                }
+            }
+        }
+        
+        return ans;
+    }
+}
