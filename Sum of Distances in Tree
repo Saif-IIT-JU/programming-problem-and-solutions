@@ -1,0 +1,69 @@
+class Solution {
+    int[] dis;
+    int[] sz;
+    int[] ans;
+    List<List<Integer>>adj;
+
+    public int[] sumOfDistancesInTree(int n, int[][] edges) {
+        init(n, edges);
+
+        dfs1(0, -1);
+        dfs2(0, -1);
+
+        return ans;
+    }
+
+    private void dfs2(int curr, int prev) {
+        ans[curr] = dis[curr];
+
+        for (int i = 0; i < adj.get(curr).size(); i++) {
+            int v = adj.get(curr).get(i);
+
+            if (v != prev) {
+                sz[curr] -= sz[v];
+                dis[curr] -= dis[v] + sz[v];
+                dis[v] += dis[curr] + sz[curr];
+                sz[v] += sz[curr];
+
+                dfs2(v, curr);
+
+                sz[v] -= sz[curr];
+                dis[v] -= dis[curr] + sz[curr];
+                dis[curr] += dis[v] + sz[v];
+                sz[curr] += sz[v];
+            }
+        }
+    }
+
+    private void dfs1(int curr, int prev) {
+        sz[curr] = 1;
+
+        for (int i = 0; i < adj.get(curr).size(); i++) {
+            int v = adj.get(curr).get(i);
+
+            if (v != prev) {
+                dfs1(v, curr);
+                sz[curr] += sz[v];
+                dis[curr] += dis[v] + sz[v];
+            }
+        }
+    }
+
+    private void init(int n, int[][] edges) {
+        dis = new int[n];
+        sz = new int[n];
+        ans = new int[n];
+        adj = new ArrayList<>();
+
+        for (int i = 0; i < n; i++) {
+            adj.add(new ArrayList<Integer>());
+        }
+
+        for (int[] edge : edges) {
+            int u = edge[0];
+            int v = edge[1];
+            adj.get(u).add(v);
+            adj.get(v).add(u);
+        }
+    }
+}
