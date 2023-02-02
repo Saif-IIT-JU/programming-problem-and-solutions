@@ -1,0 +1,42 @@
+/**
+ * TC = O(N^2) ; Where N is the length of array.
+ * MC = O(N^2)
+ */
+
+class Solution {
+
+    int[][] scoreAndAge;
+    Integer[][] dp;
+
+    public int bestTeamScore(int[] scores, int[] ages) {
+        int n = scores.length;
+        scoreAndAge = new int[n][2];
+        dp = new Integer[n][n+1];
+
+        for (int i = 0; i < n; i++) {
+            scoreAndAge[i] = new int[]{scores[i], ages[i]};
+        }
+
+        Arrays.sort(scoreAndAge, (a, b) -> (a[0] == b[0]) ? a[1] - b[1] : a[0] - b[0]);
+
+        return solve(0, -1);
+    }
+
+    private int solve(int curr, int prev) {
+        if (curr >= scoreAndAge.length) {
+            return 0;
+        }
+
+        if (dp[curr][prev+1] != null) {
+            return dp[curr][prev+1];
+        }
+
+        int ret = solve(curr + 1, prev);
+
+        if (prev == -1 || scoreAndAge[curr][1] >= scoreAndAge[prev][1]) {
+            ret = Math.max(ret, scoreAndAge[curr][0] + solve(curr + 1, curr));
+        }
+
+        return dp[curr][prev+1] = ret;
+    }
+}
