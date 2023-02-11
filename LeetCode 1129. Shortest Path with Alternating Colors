@@ -1,0 +1,58 @@
+class Solution {
+    
+    int[] dis;
+    int[][] vis;
+    List<List<int[]>> adj;
+    
+    public int[] shortestAlternatingPaths(int n, int[][] redEdges, int[][] blueEdges) {
+        
+        dis = new int[n];
+        vis = new int[n][2];
+        adj = new ArrayList<>();
+        Arrays.fill(dis, -1);
+        
+        for (int i = 0; i < n; i++) {
+            adj.add(new ArrayList<>());
+        }
+        
+        for (int[] redEdge : redEdges) {
+            int u = redEdge[0], v = redEdge[1];
+            adj.get(u).add(new int[]{v, 0});
+        }
+        
+        for (int[] blueEdge : blueEdges) {
+            int u = blueEdge[0], v = blueEdge[1];
+            adj.get(u).add(new int[]{v, 1});
+        }
+        
+        bfs(0);
+        
+        return dis;
+    }
+    
+    private void bfs(int source) {
+        Queue<int[]> q = new LinkedList<>();
+        q.add(new int[]{source, 0, 0});
+        q.add(new int[]{source, 1, 0});
+        dis[source] = 0;
+        vis[source][0] = 1;
+        vis[source][1] = 1;
+        
+        while (!q.isEmpty()) {
+            int[] u = q.poll();
+            
+            for (int[] v : adj.get(u[0])) {
+                if (u[1] == v[1] || vis[v[0]][v[1]] == 1) {
+                    continue;
+                }
+                
+                if (dis[v[0]] == -1) {
+                    dis[v[0]] = u[2] + 1;
+                }
+                
+                vis[v[0]][v[1]] = 1;
+                q.add(new int[]{v[0], v[1], u[2] + 1});
+            }
+        }
+    }
+}
