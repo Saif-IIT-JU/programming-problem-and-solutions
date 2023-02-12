@@ -1,0 +1,45 @@
+/**
+ * TC = O(n); where n is the number of cities;
+ * MC = O(n)
+ */
+
+class Solution {
+    
+    long minFuel;
+    List<List<Integer>> adj;
+    
+    public long minimumFuelCost(int[][] roads, int seats) {
+        int n = roads.length + 1;
+        adj = new ArrayList<>();
+        
+        for (int i = 0; i < n; i++) {
+            adj.add(new ArrayList<>());
+        }
+        
+        for (int[] road : roads) {
+            int u = road[0], v = road[1];
+            adj.get(u).add(v);
+            adj.get(v).add(u);
+        }
+        
+        dfs(0, -1, seats);
+        
+        return minFuel;
+    }
+    
+    private int dfs(int curr, int par, int seats) {
+        int sz = 1;
+        
+        for (int nei : adj.get(curr)) {
+            if (nei != par) {
+                sz += dfs(nei, curr, seats);
+            }
+        }
+        
+        if (curr != 0 ) {
+            minFuel += (sz + seats - 1) / seats;
+        }
+        
+        return sz;
+    }
+}
